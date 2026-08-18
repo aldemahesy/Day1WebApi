@@ -41,12 +41,15 @@ namespace Day1WebApi.Controllers
             _mapper = mapper;
         }
 
+        [ProducesResponseType(typeof(List<Aset>), StatusCodes.Status200OK)]
         [HttpGet]
-        public IActionResult GetSemuaAset()
+        public IActionResult GetSemuaAset(string? kategori, string? nama)
         {
             return Ok(Assets);
         }
 
+        [ProducesResponseType(typeof(Aset), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetAsetById(Guid id)
         {
@@ -55,22 +58,51 @@ namespace Day1WebApi.Controllers
             return Ok(aset);
         }
 
+        [ProducesResponseType(typeof(Aset), StatusCodes.Status200OK)]
         [HttpPost]
         public IActionResult CreateAset(AsetDto asetParam)
         {
-            var aset = new Aset
+            if (!ModelState.IsValid)
             {
-                Nama = asetParam.Nama,
-                Kategori = asetParam.Kategori,
-                Nilai = asetParam.Nilai,
-                TanggalPerolehan = asetParam.TanggalPerolehan
-            };
+                return BadRequest(ModelState.Select(x => x.Value.Errors));
+            }
+            var aset = _mapper.Map<Aset>(asetParam);
             Assets.Add(aset);
             return Ok(aset);
+        }
+
+        [ProducesResponseType(typeof(Aset), StatusCodes.Status200OK)]
+        [HttpPut("{id}")]
+        public IActionResult UpdateAset(Guid id, AsetDto asetParam)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Select(x => x.Value.Errors));
+            }
+            var aset = Assets.FirstOrDefault(x => x.Id == id);
+            if (aset == null) return NotFound();
+            aset.Kategori = asetParam.Kategori;
+            aset.Nama = asetParam.Nama;
+            aset.Nilai = asetParam.Nilai;
+            aset.TanggalPerolehan = asetParam.TanggalPerolehan;
+
+            return Ok(aset);
+        }
+
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAset(Guid id)
+        {
+            var aset = Assets.FirstOrDefault(x => x.Id == id);
+            if (aset == null) return NotFound();
+            Assets.Remove(aset);
+            return Ok("Aset berhasil dihapus");
         }
     }
 }
 
 
-
+//bentuk dasar GetSemuaAset() jika ingin menambahkan query pada [HttpGet]. fungsinya untuk memfilter data Aset.
+//Perbedaannya dengan[HttpGet("{id}")] yaitu jika pada query, filtering dilakukan di akhir. jadi seluruh data akan di load terlebih dahulu sehingga membutuhkan memory yang lebih besar.
+//Sedangkan [HttpGet("{id}")] filtering dilakukan di awal dan hanya akan mengamnil data dengan id yang diinput saja, jadi memory yang dibutuhkan lebih kecil, namun tidak bisa melihat aset dengan id lain.
 
