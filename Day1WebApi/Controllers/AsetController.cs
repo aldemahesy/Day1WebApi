@@ -102,4 +102,3 @@ namespace Day1WebApi.Controllers
 }
 
 
-//param adalah nama variabel yang berisi data inputan dari front end
