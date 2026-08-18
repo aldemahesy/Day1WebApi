@@ -102,6 +102,4 @@ namespace Day1WebApi.Controllers
 }
 
 
-//bentuk dasar GetSemuaAset() jika ingin menambahkan query pada [HttpGet]. fungsinya untuk memfilter data Aset.
-//Perbedaannya dengan[HttpGet("{id}")] yaitu jika pada query, filtering dilakukan di akhir. jadi seluruh data akan di load terlebih dahulu sehingga membutuhkan memory yang lebih besar.
-// Sedangkan [HttpGet("{id}")] filtering dilakukan di awal dan hanya akan mengamnil data dengan id yang diinput saja, jadi memory yang dibutuhkan lebih kecil, namun tidak bisa melihat aset dengan id lain.
+//param adalah nama variabel yang berisi data inputan dari front end
