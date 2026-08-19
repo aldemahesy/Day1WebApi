@@ -76,7 +76,7 @@ namespace Day1WebApi.Controllers
 
         [ProducesResponseType(typeof(Aset), StatusCodes.Status200OK)]
         [HttpPost]
-        public IActionResult CreateAset(AsetDto asetParam)
+        public IActionResult CreateAset([FromBody] AsetDto asetParam)
         {
             if (!ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace Day1WebApi.Controllers
 
         [ProducesResponseType(typeof(Aset), StatusCodes.Status200OK)]
         [HttpPut("{id}")]
-        public IActionResult UpdateAset(Guid id, AsetDto asetParam)
+        public IActionResult UpdateAset(Guid id, [FromBody] AsetDto asetParam)
         {
             if (!ModelState.IsValid)
             {
